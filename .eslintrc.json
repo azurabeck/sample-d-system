@@ -1,0 +1,46 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "next/core-web-vitals"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": "latetest",
+      "sourceType": "module"
+    },
+    "plugins": ["react", "@typescript-eslint"],
+    "rules": {
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+      "react/no-unescaped-entities": "error",
+      "@next/next/no-document-import-in-page": "off",
+      "@next/next/no-page-custom-font": "off",    
+      "no-use-before-define": ["error", {"functions": false, "classes": false}],
+      "@typescript-eslint/no-explicit-any": "off"
+    },
+    "overrides": [
+      {
+        "files": ["*.styles.tsx", "*.styles.ts"],
+        "rules": {
+          "@typescript-eslint/no-unused-vars": "off"
+        }
+      }
+    ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  }
+  
