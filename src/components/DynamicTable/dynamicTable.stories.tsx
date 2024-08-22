@@ -13,10 +13,20 @@ const Template: StoryFn<DynamicTableProps> = (args: DynamicTableProps) => <Dynam
 
 export const Default = Template.bind({});
 Default.args = {
-  api: 'https://jsonplaceholder.typicode.com/posts', 
+  api: 'https://api.dev.k8s.safra.int/case-management/v1/searchcasebyuser?UserOwner=FlavioH&TypeRequest=1&Application=6', 
   clickRow: (rowData: any) => console.log('Row clicked:', rowData),
   filter: true,
-  pagination: 10
+  pagination: 10,
+  objectAccess: 'data.record',
+};
+
+export const WithObjectAccess = Template.bind({});
+WithObjectAccess.args = {
+  api: 'https://api.dev.k8s.safra.int/case-management/v1/searchcasebyuser?UserOwner=FlavioH&TypeRequest=1&Application=6', 
+  clickRow: (rowData: any) => console.log('Row clicked:', rowData),
+  filter: true,
+  pagination: 10,
+  objectAccess: 'data.record[0].caseAttribute',
 };
 
 export const MultipleColums = Template.bind({});
@@ -25,18 +35,6 @@ MultipleColums.args = {
   clickRow: (rowData: any) => console.log('Row clicked:', rowData),
   filter: true,
   pagination: 10,
-  tagColumns: {
-    title: ({ value }: { value: string }) => <span style={{ color: 'blue' }}>{value}</span>,
-    id: ({ value }: { value: number }) => <strong>{value}</strong>,
-    userId: ({ value }: { value: number }) => <strong>{value}</strong>,
-    body: ({ value }: { value: string }) => <span>{value}</span>,
-    extraColumn1: ({ value }: { value: string }) => <span>{value}</span>,
-    extraColumn2: ({ value }: { value: string }) => <span>{value}</span>,
-    extraColumn3: ({ value }: { value: string }) => <span>{value}</span>,
-    extraColumn4: ({ value }: { value: string }) => <span>{value}</span>,
-    extraColumn5: ({ value }: { value: string }) => <span>{value}</span>,
-    extraColumn6: ({ value }: { value: string }) => <span>{value}</span>,
-  },
 };
 
 export const WithTag = Template.bind({});

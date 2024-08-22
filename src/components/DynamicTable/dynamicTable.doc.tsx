@@ -8,7 +8,7 @@ const DynamicTableDocument: React.FC = () => {
       <h1>DynamicTable Documentation</h1>
       <p>This is the documentation for the DynamicTable component.</p>
       <DynamicTable
-        api="https://jsonplaceholder.typicode.com/posts"
+        api="fullapi.sample.com"
         clickRow={(rowData) => console.log('Row clicked:', rowData)}
         filter={true}
         pagination={10}

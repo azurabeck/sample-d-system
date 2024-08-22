@@ -1,9 +1,10 @@
 export interface DynamicTableProps {
   api?: string;
-  data?: any[]; // Adicione esta linha para permitir que o componente receba dados diretamente
+  data?: any[]; 
   clickRow: (rowData: any) => void;
   filter?: boolean;
   pagination?: boolean | number;
+  objectAccess?: string;
   tagColumns?: {
     [key: string]: React.FC<{ value: any }>;
   };

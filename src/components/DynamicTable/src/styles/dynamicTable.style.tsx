@@ -15,11 +15,11 @@ export const TableWrapper: typeof Table = styled(Table)<{
   completed?: boolean;
 }>`
   .ant-table-wrapper {
-    overflow-x: auto; /* Garante que o wrapper tenha overflow horizontal */
+    overflow-x: auto;
   }
 
   .ant-table {
-    min-width: 1000px; /* Definindo uma largura mínima para forçar o scroll */
+    min-width: 1000px; 
   }
 
   .ant-table-thead > tr > th {
@@ -32,6 +32,7 @@ export const TableWrapper: typeof Table = styled(Table)<{
 
   .ant-table-cell > a {
     color: #636574 !important;
+    width: 200px;
   }
 
   .ant-table-cell > span > a {
