@@ -1,5 +1,9 @@
 import { Table } from "antd";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+
+// Importação da fonte Figtree
+import FigtreeRegular from '../assets/fonts/figtree/Figtree-Regular.ttf'
+import FigtreeBold from '../assets/fonts/figtree/Figtree-Bold.ttf';
 
 interface ITable {
   completed?: boolean;
@@ -10,102 +14,127 @@ interface ITable {
   resultValue?: string;
 }
 
-// Estilizando o componente Table do antd
-export const TableWrapper: typeof Table = styled(Table)<{
-  completed?: boolean;
-}>`
+export const TableWrapper: typeof Table = styled(Table)<{ completed?: boolean }>`
+  @font-face {
+    font-family: 'Figtree';
+    src: url(${FigtreeRegular}) format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Figtree';
+    src: url(${FigtreeBold}) format('truetype');
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  * {
+    font-family: 'Figtree', sans-serif;
+  }
+
   .ant-table-wrapper {
-    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto; 
   }
 
   .ant-table {
-    min-width: 1000px; 
+    width: 100%;
+    max-width: 100%;
+    table-layout: auto;
   }
 
-  .ant-table-thead > tr > th {
+  .ant-table-thead > tr > th,
+  .ant-table-fixed-left,
+  .ant-table-fixed-right {
     background: #fff;
   }
 
-  .ant-table-content {
-    overflow: hidden !important;
-  }
-
-  .ant-table-cell > a {
-    color: #636574 !important;
-    width: 200px;
-  }
-
-  .ant-table-cell > span > a {
-    color: #636574 !important;
-  }
-
-  .ant-table-cell::before {
-    display: none;
-  }
-
-  .ant-table-cell-ellipsis {
-    padding: 12px 8px !important;
-    cursor: pointer !important;
-  }
-
-  .ant-table-cell-ellipsis:active {
-    background-color: #d6d6d6;
-  }
-
-  .ant-table-cell-ellipsis::before {
-    display: none;
-  }
-
-  .ant-table-cell-fix-left:not(th) {
-    text-transform: uppercase !important;
-  }
-
   .ant-table-body {
-    overflow-x: auto !important; /* Habilita o scroll horizontal no corpo da tabela */
+    overflow-x: auto;
     cursor: pointer;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #bfbfbf;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #f0f0f0;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #999;
+    }
+
+    &::-webkit-scrollbar-button {
+      display: none;
+    }
+  }
+
+  .ant-table-cell {
+    color: #636574 !important;
+
+    & > a,
+    & > span > a {
+      color: #636574 !important;
+    }
+
+    &::before {
+      display: none;
+    }
+
+    &-ellipsis {
+      padding: 12px 8px !important;
+      cursor: pointer !important;
+
+      &:active {
+        background-color: #d6d6d6;
+      }
+    }
+
+    &-fix-left:not(th) {
+      text-transform: uppercase !important;
+    }
   }
 
   .ant-table-tbody > tr > td > a:hover {
     all: unset !important;
   }
+`;
 
-  .ant-table-fixed-header .ant-table-scroll .ant-table-header {
-    overflow: hidden !important;
-  }
-
-  .ant-table-fixed-left,
-  .ant-table-fixed-right {
-    background-color: #fff; /* Cor de fundo para as colunas fixas */
-    z-index: 1; /* Garantindo que as colunas fixas estejam acima das outras */
-  }
+export const EllipsisText = styled.div<{ maxLines: number }>`
+  display: -webkit-box;
+  -webkit-line-clamp: ${(props) => props.maxLines};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 `;
 
 export const ContainerWrapper = styled.div<ITable>`
   width: 114px;
   height: 33px;
-  background: #f9ede6;
-  align-items: center;
+  background: ${(props) => (props.completed ? "#e6f2ee" : "#f9ede6")};
   display: flex;
-  flex-direction: row;
+  align-items: center;
   border-radius: 4px;
-  ${(props) =>
-    props.completed &&
-    css`
-      background: #e6f2ee;
-    `}
 `;
 
 export const IconWrapper = styled.div`
   display: flex;
   align-items: center;
-  padding: 0px 4px 0px 10px;
-  width: 16px;
+  padding: 0 4px 0 10px;
+  width: 32px;
   height: 16px;
 `;
 
 export const TextStatus = styled.span<ITable>`
-  font-family: "Figtree";
-  font-style: normal;
   font-weight: 600;
   font-size: 14px;
   color: ${(props) => (props.completed ? "#008056" : "#aa4500")};
@@ -114,69 +143,61 @@ export const TextStatus = styled.span<ITable>`
 export const ContainerResultWrapper = styled.div<ITable>`
   width: ${(props) => `${props.width}px`};
   height: 33px;
-  align-items: center;
   display: flex;
-  flex-direction: row;
+  align-items: center;
   border-radius: 4px;
-  ${(props) => {
-    if (props.resultValue == "pending") {
-      return css`
-        background: #f9ede6;
-      `;
+  background: ${(props) => {
+    switch (props.resultValue) {
+      case "pending":
+        return "#f9ede6";
+      case "canceled":
+      case "cancel":
+      case "reject":
+      case "rejected":
+        return "#fbeaea";
+      case "approved":
+      case "confirm":
+        return "#e6f2ee";
+      default:
+        return "transparent";
     }
-
-    if (
-      props.resultValue === "canceled" ||
-      props.resultValue === "cancel" ||
-      props.resultValue === "reject" ||
-      props.resultValue === "rejected"
-    ) {
-      return css`
-        background: #fbeaea;
-      `;
-    }
-
-    if (props.resultValue == "approved" || props.resultValue == "confirm") {
-      return css`
-        background: #e6f2ee;
-      `;
-    }
-  }}
+  }};
 `;
 
 export const IconResultWrapper = styled.div`
   display: flex;
   align-items: center;
-  padding: 0px 4px 0px 10px;
+  padding: 0 4px 0 10px;
 `;
 
 export const TextResult = styled.span<ITable>`
-  font-family: "Figtree";
-  font-style: normal;
-  font-weight: ${(props) => props.weight};
   font-size: 14px;
-  ${(props) => {
-    if (props.resultValue == "pending") {
-      return css`
-        color: #aa4500;
-      `;
+  font-weight: ${(props) => props.weight};
+  color: ${(props) => {
+    switch (props.resultValue) {
+      case "pending":
+        return "#aa4500";
+      case "canceled":
+      case "cancel":
+      case "reject":
+      case "rejected":
+        return "#ca303d";
+      case "approved":
+      case "confirm":
+        return "#006d49";
+      default:
+        return "#000";
     }
+  }};
+`;
 
-    if (
-      props.resultValue === "canceled" ||
-      props.resultValue === "cancel" ||
-      props.resultValue === "reject" ||
-      props.resultValue === "rejected"
-    ) {
-      return css`
-        color: #ca303d;
-      `;
-    }
-
-    if (props.resultValue == "approved" || props.resultValue == "confirm") {
-      return css`
-        color: #006d49;
-      `;
-    }
-  }}
+export const DefaultTagWrapper = styled.span`
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 4px;
+  text-align: center;
+  white-space: nowrap;
 `;

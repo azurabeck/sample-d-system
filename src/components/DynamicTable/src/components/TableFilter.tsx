@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, Dropdown, Button } from 'antd';
-import { FilterOutlined } from '@ant-design/icons';
+import { IconWrapper } from '../styles/dynamicTable.style';
+import { Filter } from '../assets/images';
 
 interface TableFilterProps {
   column: string;
@@ -20,7 +21,7 @@ const TableFilter: React.FC<TableFilterProps> = ({ column, onFilterChange, onSor
   return (
     <Dropdown overlay={menu} trigger={['click']}>
       <Button type="text">
-        {column} <FilterOutlined />
+        <IconWrapper><Filter /></IconWrapper> {column} 
       </Button>
     </Dropdown>
   );

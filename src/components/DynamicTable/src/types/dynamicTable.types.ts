@@ -8,6 +8,7 @@ export interface DynamicTableProps {
   tagColumns?: {
     [key: string]: React.FC<{ value: any }>;
   };
+  renderColumns?: string[]; 
 }
 
 export interface DataItem {

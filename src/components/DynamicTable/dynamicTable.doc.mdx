@@ -1,0 +1,141 @@
+
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Components/DynamicTable" />
+
+# DynamicTable Component Documentation
+
+## Importação
+
+Para usar o componente `DynamicTable`, você deve importá-lo no seu arquivo conforme o exemplo abaixo:
+
+```tsx
+import DynamicTable from './src/DynamicTable'
+```
+
+## Uso Básico
+Aqui está um exemplo básico de como usar o `DynamicTable`:
+
+```tsx
+import React from 'react';
+import DynamicTable from './src/DynamicTable';
+import { mockData2 } from './src/store/mockData2';
+
+const Example = () => {
+  return (
+    <DynamicTable
+      api='sample.url.com' //Use para gerar com uma API real
+      data={mock1} //Use para gerar com um mock
+      clickRow={(rowData) => console.log('Row clicked:', rowData)}
+      filter={true}
+      pagination={10}
+      tagColumns={['applicationName', 'caseAttribute[0].value']}
+      renderColumns={{
+        'Application Name': 'applicationName',
+        'Created By': 'createdBy',
+        'Period From': 'caseAttribute[0].value',
+        'Manager Name': 'caseAttribute[1].value',
+      }}
+    />
+  );
+};
+
+export default Example;
+```
+
+## Props
+
+### `api` (opcional)
+- **Tipo**: `string`
+- **Descrição**: URL da API de onde os dados serão buscados.
+- **Exemplo**: `'https://api.example.com/data'`
+
+### `data` (opcional)
+- **Tipo**: `DataItem[]`
+- **Descrição**: Dados estáticos a serem exibidos na tabela. Se `data` for fornecido, a chamada de API será ignorada.
+- **Exemplo**: 
+```json
+[
+  {
+    "applicationName": "Travel",
+    "createdBy": "John Doe",
+    "caseAttribute": [
+      { "name": "PERIOD_FROM", "value": "2024-06-17" },
+      { "name": "MANAGER_NAME", "value": "Carlos Bomfim" }
+    ],
+    "createdOn": "2024-06-17T11:19:15.665125-04:00"
+  }
+]
+```
+
+### `clickRow` (obrigatório)
+- **Tipo**: `(rowData: any) => void`
+- **Descrição**: Função chamada quando uma linha é clicada. Recebe os dados da linha como argumento.
+- **Exemplo**: 
+```tsx
+(rowData) => console.log('Row clicked:', rowData)
+```
+
+### `filter` (opcional)
+- **Tipo**: `boolean`
+- **Descrição**: Habilita a funcionalidade de filtro/ordenação nas colunas.
+- **Exemplo**: `true`
+
+### `pagination` (opcional)
+- **Tipo**: `boolean | number`
+- **Descrição**: Define se a tabela deve usar paginação. Se um número for fornecido, ele representa o número de linhas por página.
+- **Exemplo**: `10`
+
+### `tagColumns` (opcional)
+- **Tipo**: `string[]`
+- **Descrição**: Array de colunas onde os valores devem ser decorados com um componente `Tag`.
+- **Exemplo**: `['applicationName', 'caseAttribute[0].name']`
+
+### `renderColumns` (opcional)
+- **Tipo**: `{ [key: string]: [string, string?, 'date' | 'time'?] }`
+- **Descrição**: Utilizado para determinar quais colunas da resposta da API ou do mock você deseja renderizar na sua tabela. Cada chave no objeto `renderColumns` representa o título da coluna que será exibido na tabela, e o valor é um array com até quatro itens, conforme descrito abaixo:
+
+  1. **Caminho para os Dados** (obrigatório, `string`): O primeiro valor do array é uma string que define o caminho dentro do objeto de cada linha onde os dados dessa coluna podem ser encontrados.
+  
+  2. **Largura da Coluna** (opcional, `string`): O segundo valor do array é uma string que define a largura da coluna. Esse valor pode ser especificado em qualquer unidade de CSS (por exemplo, `px`, `%`, `em`). Se não for especificado, a largura da coluna será determinada automaticamente.
+
+  3. **Formatação de Data ou Hora** (opcional, `'date' | 'time'`): O terceiro valor do array define se a coluna deve ser formatada como uma data (`'date'`) ou como uma hora (`'time'`). Se não for especificado, a coluna será renderizada como texto normal.
+  
+  4. **Linhas multiplas** (opcional, `number`): O quarto valor do array define se a quantidade de quebras de linhas a coluna deve respeitar antes de utilizar a ellipse. Caso nenhum valor for fornecido fica estabelicido como default o valor 1, ou seja, não terá quebras de linha.
+#
+
+- **Exemplo**:
+```json
+{
+  'Application Name': ['applicationName'], 
+  'Created By': ['createdBy'],                     
+  'Period From': ['caseAttribute[0].value', '200px', 'date', 2],       
+  'Time Created': ['createdOn', null, 'time'], 
+  'Manager Name': ['caseAttribute[1].value'], 
+}
+```
+
+### `objectAccess` (opcional)
+- **Tipo**: `string`
+- **Descrição**: Caminho opcional para acessar um subobjeto dentro da resposta da API. Usado para quando você quer renderizar o conteúdo de um objeto que não é o imediato da resposta da API.
+- **Exemplo**: `'body.records'` 
+
+```json
+data: [{
+  body: [{
+    records: [
+      {
+        //este é o conteúdo que vai ser renderizado na sua table
+      }
+    ]
+  }] 
+}]
+```
+
+## Considerações Finais
+
+Se tanto `api` quanto `data` forem fornecidos, a propriedade `data` terá precedência, e a chamada de API será ignorada.
+
+As colunas especificadas em `renderColumns` podem ser propriedades diretas do objeto ou caminhos aninhados dentro de arrays/objetos, como demonstrado no exemplo.
+
+Este componente é altamente flexível e configurável, permitindo a personalização das colunas, formatação de conteúdo, e comportamento de filtragem e paginação.
